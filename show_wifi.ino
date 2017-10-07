@@ -1,7 +1,7 @@
 #include <WiFi.h>
 
 //name of the network
-const char* ssid = "Why is Bill an idiot";
+const char* ssid = "Patient";
 float oldDistance = - 100;
 int state = 1; //1 = forward, 2 = backward, 3 = left, 4 = right
  
@@ -19,18 +19,12 @@ void setup() {
 
 // calculate strength of signal by getting average of 5 measurements
 float signalStrength(){
-  float total = 0;
-  for (int j = 0; j < 5; j++){
-    int n = WiFi.scanNetworks();
-    for (int i = 0; i < n; ++i) {
-      if(WiFi.SSID(i) == ssid){
-        total += WiFi.RSSI(i);
-        break;
-      }
+  int n = WiFi.scanNetworks();
+  for (int i = 0; i < n; ++i) {
+    if(WiFi.SSID(i) == ssid){
+      return WiFi.RSSI(i);
     }
   }
-  total = total/5;
-  return total;
 }
 
 void goDir(int dir) {
@@ -43,10 +37,12 @@ void goDir(int dir) {
       Serial.println("back");
       break;
     case 3:
-      Serial.println("left");
+      Serial.println("turn");
+      Serial.println("forward");
       break;
     case 4:
-      Serial.println("right");
+      Serial.println("turn");
+      Serial.println("forward");
       break;
   }
 }
@@ -67,4 +63,3 @@ void loop() {
   Serial.println(strength);
   oldDistance = strength;
 }
-
